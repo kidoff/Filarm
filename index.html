@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filarm - Free Finance Calculators for Indians 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .calc-section { display: none; }
+        .calc-section.active { display: block; }
+        .input-group { position: relative; }
+        .input-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280; }
+        .input-field { width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; transition: border-color 0.2s; }
+        .input-field:focus { border-color: #2563eb; box-shadow: 0 0 0 2px #bfdbfe; }
+        .input-field-no-icon { width: 100%; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; transition: border-color 0.2s; }
+        .input-field-no-icon:focus { border-color: #2563eb; box-shadow: 0 0 0 2px #bfdbfe; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
+    <header class="bg-blue-700 text-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold tracking-tight">Filarm</div>
+            <div class="text-sm md:text-lg font-medium">Free Finance Calculators for Indians 2026</div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-6 flex-grow flex flex-col md:flex-row gap-6">
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <nav class="bg-white rounded-xl shadow-sm p-2 flex flex-col gap-1" id="nav-buttons">
+                <button onclick="switchTab('emi')" class="tab-btn active w-full text-left px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-semibold transition-colors" data-target="emi">EMI Calculator</button>
+                <button onclick="switchTab('loan')" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 text-gray-600 font-medium transition-colors" data-target="loan">Loan Calculator</button>
+                <button onclick="switchTab('sip')" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 text-gray-600 font-medium transition-colors" data-target="sip">SIP Calculator</button>
+                <button onclick="switchTab('fd')" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 text-gray-600 font-medium transition-colors" data-target="fd">FD Interest Calculator</button>
+                <button onclick="switchTab('rd')" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 text-gray-600 font-medium transition-colors" data-target="rd">RD Calculator</button>
+                <button onclick="switchTab('gst')" class="tab-btn w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 text-gray-600 font-medium transition-colors" data-target="gst">GST Calculator</button>
+            </nav>
+        </aside>
+
+        <main class="flex-grow bg-white rounded-xl shadow-sm p-6 md:p-8">
+            <div class="mb-8 pb-4 border-b border-gray-100">
+                <p class="text-lg font-medium text-green-700">Welcome! Instant finance tools for loans, investments and taxes. 100% Free. No signup needed.</p>
+            </div>
+
+            <!-- EMI Calculator -->
+            <div id="emi" class="calc-section active">
+                <h2 class="text-2xl font-bold text-blue-900 mb-2">EMI Calculator</h2>
+                <p class="text-gray-500 mb-6">This helps you know exact monthly EMI for your home loan</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Loan Amount</label>
+                            <div class="input-group">
+                                <span class="input-icon">₹</span>
+                                <input type="number" id="emi-p" class="input-field" placeholder="e.g. 5000000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Annual Interest Rate (%)</label>
+                            <input type="number" id="emi-r" class="input-field-no-icon" placeholder="e.g. 8.5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tenure (in Years)</label>
+                            <input type="number" id="emi-n" class="input-field-no-icon" placeholder="e.g. 20">
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="calcEMI()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">Calculate</button>
+                            <button onclick="resetCalc('emi')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">Reset</button>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-center">
+                        <div class="mb-4">
+                            <p class="text-sm text-blue-600 font-semibold uppercase tracking-wider">Monthly EMI</p>
+                            <p class="text-4xl font-bold text-blue-900" id="emi-res-emi">₹0</p>
+                        </div>
+                        <div class="space-y-2 border-t border-blue-200 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Total Interest</span>
+                                <span class="font-semibold text-gray-900" id="emi-res-int">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Total Payment</span>
+                                <span class="font-semibold text-gray-900" id="emi-res-total">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan Calculator -->
+            <div id="loan" class="calc-section">
+                <h2 class="text-2xl font-bold text-blue-900 mb-2">Loan Calculator</h2>
+                <p class="text-gray-500 mb-6">Calculate total interest and total amount payable for your loan</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Loan Amount</label>
+                            <div class="input-group">
+                                <span class="input-icon">₹</span>
+                                <input type="number" id="loan-p" class="input-field" placeholder="e.g. 1000000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Annual Interest Rate (%)</label>
+                            <input type="number" id="loan-r" class="input-field-no-icon" placeholder="e.g. 10.5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tenure (in Years)</label>
+                            <input type="number" id="loan-n" class="input-field-no-icon" placeholder="e.g. 5">
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="calcLoan()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">Calculate</button>
+                            <button onclick="resetCalc('loan')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">Reset</button>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-center">
+                        <div class="mb-4">
+                            <p class="text-sm text-blue-600 font-semibold uppercase tracking-wider">Total Amount to Pay</p>
+                            <p class="text-4xl font-bold text-blue-900" id="loan-res-total">₹0</p>
+                        </div>
+                        <div class="space-y-2 border-t border-blue-200 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Principal Amount</span>
+                                <span class="font-semibold text-gray-900" id="loan-res-prin">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Total Interest</span>
+                                <span class="font-semibold text-gray-900" id="loan-res-int">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIP Calculator -->
+            <div id="sip" class="calc-section">
+                <h2 class="text-2xl font-bold text-blue-900 mb-2">SIP Calculator</h2>
+                <p class="text-gray-500 mb-6">Calculate the future value of your monthly SIP investments</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Investment</label>
+                            <div class="input-group">
+                                <span class="input-icon">₹</span>
+                                <input type="number" id="sip-p" class="input-field" placeholder="e.g. 5000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Expected Return Rate (p.a %)</label>
+                            <input type="number" id="sip-r" class="input-field-no-icon" placeholder="e.g. 12">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time Period (in Years)</label>
+                            <input type="number" id="sip-n" class="input-field-no-icon" placeholder="e.g. 10">
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="calcSIP()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">Calculate</button>
+                            <button onclick="resetCalc('sip')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">Reset</button>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-center">
+                        <div class="mb-4">
+                            <p class="text-sm text-blue-600 font-semibold uppercase tracking-wider">Maturity Amount</p>
+                            <p class="text-4xl font-bold text-blue-900" id="sip-res-mat">₹0</p>
+                        </div>
+                        <div class="space-y-2 border-t border-blue-200 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Total Invested</span>
+                                <span class="font-semibold text-gray-900" id="sip-res-inv">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Wealth Gained</span>
+                                <span class="font-semibold text-green-700" id="sip-res-gain">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FD Calculator -->
+            <div id="fd" class="calc-section">
+                <h2 class="text-2xl font-bold text-blue-900 mb-2">FD Interest Calculator</h2>
+                <p class="text-gray-500 mb-6">Find out how much your Fixed Deposit will grow over time</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Total Deposit</label>
+                            <div class="input-group">
+                                <span class="input-icon">₹</span>
+                                <input type="number" id="fd-p" class="input-field" placeholder="e.g. 100000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate (p.a %)</label>
+                            <input type="number" id="fd-r" class="input-field-no-icon" placeholder="e.g. 7.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time Period (in Years)</label>
+                            <input type="number" id="fd-n" class="input-field-no-icon" placeholder="e.g. 5">
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="calcFD()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">Calculate</button>
+                            <button onclick="resetCalc('fd')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">Reset</button>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-center">
+                        <div class="mb-4">
+                            <p class="text-sm text-blue-600 font-semibold uppercase tracking-wider">Maturity Amount</p>
+                            <p class="text-4xl font-bold text-blue-900" id="fd-res-mat">₹0</p>
+                        </div>
+                        <div class="space-y-2 border-t border-blue-200 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Principal Amount</span>
+                                <span class="font-semibold text-gray-900" id="fd-res-prin">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Interest Earned</span>
+                                <span class="font-semibold text-green-700" id="fd-res-int">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RD Calculator -->
+            <div id="rd" class="calc-section">
+                <h2 class="text-2xl font-bold text-blue-900 mb-2">RD Calculator</h2>
+                <p class="text-gray-500 mb-6">Calculate returns on your Recurring Deposit</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Deposit</label>
+                            <div class="input-group">
+                                <span class="input-icon">₹</span>
+                                <input type="number" id="rd-p" class="input-field" placeholder="e.g. 2000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate (p.a %)</label>
+                            <input type="number" id="rd-r" class="input-field-no-icon" placeholder="e.g. 6.5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time Period (in Years)</label>
+                            <input type="number" id="rd-n" class="input-field-no-icon" placeholder="e.g. 3">
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="calcRD()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">Calculate</button>
+                            <button onclick="resetCalc('rd')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">Reset</button>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-center">
+                        <div class="mb-4">
+                            <p class="text-sm text-blue-600 font-semibold uppercase tracking-wider">Maturity Amount</p>
+                            <p class="text-4xl font-bold text-blue-900" id="rd-res-mat">₹0</p>
+                        </div>
+                        <div class="space-y-2 border-t border-blue-200 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Total Invested</span>
+                                <span class="font-semibold text-gray-900" id="rd-res-inv">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Interest Earned</span>
+                                <span class="font-semibold text-green-700" id="rd-res-int">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GST Calculator -->
+            <div id="gst" class="calc-section">
+                <h2 class="text-2xl font-bold text-blue-900 mb-2">GST Calculator</h2>
+                <p class="text-gray-500 mb-6">Quickly calculate GST amount and total price</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Original Amount</label>
+                            <div class="input-group">
+                                <span class="input-icon">₹</span>
+                                <input type="number" id="gst-p" class="input-field" placeholder="e.g. 1000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">GST Rate (%)</label>
+                            <input type="number" id="gst-r" class="input-field-no-icon" placeholder="e.g. 18">
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="calcGST()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">Calculate</button>
+                            <button onclick="resetCalc('gst')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">Reset</button>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-center">
+                        <div class="mb-4">
+                            <p class="text-sm text-blue-600 font-semibold uppercase tracking-wider">Total Amount (with GST)</p>
+                            <p class="text-4xl font-bold text-blue-900" id="gst-res-total">₹0</p>
+                        </div>
+                        <div class="space-y-2 border-t border-blue-200 pt-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Original Amount</span>
+                                <span class="font-semibold text-gray-900" id="gst-res-prin">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">GST Amount</span>
+                                <span class="font-semibold text-gray-900" id="gst-res-tax">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="bg-gray-800 text-gray-300 py-6 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <p>Made for Indians | 100% Free Forever | Not financial advice</p>
+        </div>
+    </footer>
+
+    <script>
+        const fmt = (num) => '₹' + new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(num));
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.calc-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-blue-50', 'text-blue-700', 'font-semibold');
+                el.classList.add('hover:bg-gray-50', 'text-gray-600', 'font-medium');
+            });
+            
+            const activeBtn = document.querySelector(`.tab-btn[data-target="${tabId}"]`);
+            activeBtn.classList.remove('hover:bg-gray-50', 'text-gray-600', 'font-medium');
+            activeBtn.classList.add('bg-blue-50', 'text-blue-700', 'font-semibold');
+        }
+
+        function calcEMI() {
+            const P = parseFloat(document.getElementById('emi-p').value) || 0;
+            const rate = parseFloat(document.getElementById('emi-r').value) || 0;
+            const years = parseFloat(document.getElementById('emi-n').value) || 0;
+            if (P === 0 || rate === 0 || years === 0) return;
+            const r = rate / 12 / 100;
+            const n = years * 12;
+            const emi = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            const totalPayment = emi * n;
+            const totalInterest = totalPayment - P;
+            document.getElementById('emi-res-emi').innerText = fmt(emi);
+            document.getElementById('emi-res-int').innerText = fmt(totalInterest);
+            document.getElementById('emi-res-total').innerText = fmt(totalPayment);
+        }
+
+        function calcLoan() {
+            const P = parseFloat(document.getElementById('loan-p').value) || 0;
+            const rate = parseFloat(document.getElementById('loan-r').value) || 0;
+            const years = parseFloat(document.getElementById('loan-n').value) || 0;
+            if (P === 0 || rate === 0 || years === 0) return;
+            const r = rate / 12 / 100;
+            const n = years * 12;
+            const emi = P * r * (Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            const totalPayment = emi * n;
+            const totalInterest = totalPayment - P;
+            document.getElementById('loan-res-total').innerText = fmt(totalPayment);
+            document.getElementById('loan-res-prin').innerText = fmt(P);
+            document.getElementById('loan-res-int').innerText = fmt(totalInterest);
+        }
+
+        function calcSIP() {
+            const P = parseFloat(document.getElementById('sip-p').value) || 0;
+            const rate = parseFloat(document.getElementById('sip-r').value) || 0;
+            const years = parseFloat(document.getElementById('sip-n').value) || 0;
+            if (P === 0 || rate === 0 || years === 0) return;
+            const i = rate / 12 / 100;
+            const n = years * 12;
+            const futureValue = P * (((Math.pow(1 + i, n) - 1) / i) * (1 + i));
+            const totalInvested = P * n;
+            const wealthGained = futureValue - totalInvested;
+            document.getElementById('sip-res-mat').innerText = fmt(futureValue);
+            document.getElementById('sip-res-inv').innerText = fmt(totalInvested);
+            document.getElementById('sip-res-gain').innerText = fmt(wealthGained);
+        }
+
+        function calcFD() {
+            const P = parseFloat(document.getElementById('fd-p').value) || 0;
+            const r = parseFloat(document.getElementById('fd-r').value) || 0;
+            const t = parseFloat(document.getElementById('fd-n').value) || 0;
+            if (P === 0 || r === 0 || t === 0) return;
+            const maturityAmount = P * Math.pow((1 + r/100), t);
+            const interestEarned = maturityAmount - P;
+            document.getElementById('fd-res-mat').innerText = fmt(maturityAmount);
+            document.getElementById('fd-res-prin').innerText = fmt(P);
+            document.getElementById('fd-res-int').innerText = fmt(interestEarned);
+        }
+
+        function calcRD() {
+            const P = parseFloat(document.getElementById('rd-p').value) || 0;
+            const rate = parseFloat(document.getElementById('rd-r').value) || 0;
+            const years = parseFloat(document.getElementById('rd-n').value) || 0;
+            if (P === 0 || rate === 0 || years === 0) return;
+            const n = years * 12;
+            const r = rate;
+            const maturityAmount = P * n + P * (n * (n + 1) / 2) * (r / 12 / 100);
+            const totalInvested = P * n;
+            const interestEarned = maturityAmount - totalInvested;
+            document.getElementById('rd-res-mat').innerText = fmt(maturityAmount);
+            document.getElementById('rd-res-inv').innerText = fmt(totalInvested);
+            document.getElementById('rd-res-int').innerText = fmt(interestEarned);
+        }
+
+        function calcGST() {
+            const P = parseFloat(document.getElementById('gst-p').value) || 0;
+            const r = parseFloat(document.getElementById('gst-r').value) || 0;
+            if (P === 0 || r === 0) return;
+            const gstAmount = P * (r / 100);
+            const totalAmount = P + gstAmount;
+            document.getElementById('gst-res-total').innerText = fmt(totalAmount);
+            document.getElementById('gst-res-prin').innerText = fmt(P);
+            document.getElementById('gst-res-tax').innerText = fmt(gstAmount);
+        }
+
+        function resetCalc(prefix) {
+            document.getElementById(`${prefix}-p`).value = '';
+            document.getElementById(`${prefix}-r`).value = '';
+            if (document.getElementById(`${prefix}-n`)) {
+                document.getElementById(`${prefix}-n`).value = '';
+            }
+            
+            const resets = {
+                'emi': ['emi', 'int', 'total'],
+                'loan': ['total', 'prin', 'int'],
+                'sip': ['mat', 'inv', 'gain'],
+                'fd': ['mat', 'prin', 'int'],
+                'rd': ['mat', 'inv', 'int'],
+                'gst': ['total', 'prin', 'tax']
+            };
+
+            resets[prefix].forEach(suffix => {
+                document.getElementById(`${prefix}-res-${suffix}`).innerText = '₹0';
+            });
+        }
+    </script>
+</body>
+</html>
