@@ -7,6 +7,7 @@ export default {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filarm - Free Finance Calculators for Indians 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://pl29344125.profitablecpmratenetwork.com/c8/75/8a/c8758a9b8138d07415835eac1be779d6.js"></script>
     <style>
         .calc-section { display: none; }
         .calc-section.active { display: block; }
@@ -438,7 +439,6 @@ export default {
             });
         }
     </script>
-    <script src="https://pl29344125.profitablecpmratenetwork.com/c8/75/8a/c8758a9b8138d07415835eac1be779d6.js"></script>
 </body>
 </html>`;
 
