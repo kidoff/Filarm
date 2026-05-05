@@ -17,6 +17,7 @@ export default {
         .input-field-no-icon { width: 100%; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; transition: border-color 0.2s; }
         .input-field-no-icon:focus { border-color: #2563eb; box-shadow: 0 0 0 2px #bfdbfe; }
     </style>
+    <script src="https://pl29344125.profitablecpmratenetwork.com/c8/75/8a/c8758a9b8138d07415835eac1be779d6.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
     <header class="bg-blue-700 text-white shadow-md">
