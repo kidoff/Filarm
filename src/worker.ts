@@ -318,7 +318,34 @@ export default {
         </div>
     </footer>
 
+    <!-- Ad Blocker Message -->
+    <div id="ad-block-message" class="fixed bottom-0 left-0 right-0 bg-yellow-100 border-t-4 border-yellow-500 text-yellow-800 p-4 transition-transform transform translate-y-full flex flex-col sm:flex-row justify-between items-center z-50 gap-4">
+        <div>
+            <p class="font-bold">Please whitelist our site!</p>
+            <p class="text-sm">We provide these financial tools 100% free. To help us keep them free, please consider whitelisting our website in your ad blocker.</p>
+        </div>
+        <div class="flex items-center space-x-4 shrink-0">
+            <button onclick="window.location.reload()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded shadow transition-colors">I've whitelisted it - Reload</button>
+            <button onclick="document.getElementById('ad-block-message').classList.add('translate-y-full')" class="text-yellow-800 hover:text-yellow-900 font-bold">Dismiss</button>
+        </div>
+    </div>
+
+    <!-- Hidden element to test for ad blockers -->
+    <div id="ad-test-element" class="ad-banner ads-area pub_300x250" style="position:absolute; left:-9999px;"></div>
+
     <script>
+        // Check for ad blocker after a short delay
+        setTimeout(() => {
+            const testAd = document.getElementById('ad-test-element');
+            // If the element is hidden or its height is 0, an ad blocker is likely active
+            if (testAd && (testAd.offsetHeight === 0 || window.getComputedStyle(testAd).display === 'none')) {
+                const msg = document.getElementById('ad-block-message');
+                if(msg) {
+                     msg.classList.remove('translate-y-full');
+                }
+            }
+        }, 1000);
+
         const fmt = (num) => '₹' + new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(num));
 
         function switchTab(tabId) {
