@@ -8,6 +8,7 @@ export default {
     <title>Filarm - Free Finance Calculators for Indians 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://pl29344125.profitablecpmratenetwork.com/c8/75/8a/c8758a9b8138d07415835eac1be779d6.js"></script>
+    <script src="https://pl29354531.profitablecpmratenetwork.com/42/e8/a2/42e8a2b19c1c138387058ea0711bc65e.js"></script>
     <style>
         .calc-section { display: none; }
         .calc-section.active { display: block; }
@@ -325,7 +326,7 @@ export default {
             <p class="text-sm">We provide these financial tools 100% free. To help us keep them free, please consider whitelisting our website in your ad blocker.</p>
         </div>
         <div class="flex items-center space-x-4 shrink-0">
-            <button onclick="window.location.reload()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded shadow transition-colors">I've whitelisted it - Reload</button>
+            <button onclick="enableAds()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded shadow transition-colors">I've whitelisted it - Turn Ads On</button>
             <button onclick="document.getElementById('ad-block-message').classList.add('translate-y-full')" class="text-yellow-800 hover:text-yellow-900 font-bold">Dismiss</button>
         </div>
     </div>
@@ -345,6 +346,26 @@ export default {
                 }
             }
         }, 1000);
+
+        function enableAds() {
+            // Remove the ad block message
+            const msg = document.getElementById('ad-block-message');
+            if (msg) {
+                msg.classList.add('translate-y-full');
+            }
+            
+            // Re-inject the ad scripts to trigger them
+            const scripts = [
+                'https://pl29344125.profitablecpmratenetwork.com/c8/75/8a/c8758a9b8138d07415835eac1be779d6.js',
+                'https://pl29354531.profitablecpmratenetwork.com/42/e8/a2/42e8a2b19c1c138387058ea0711bc65e.js'
+            ];
+            
+            scripts.forEach(src => {
+                const script = document.createElement('script');
+                script.src = src;
+                document.body.appendChild(script);
+            });
+        }
 
         const fmt = (num) => '₹' + new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(num));
 
